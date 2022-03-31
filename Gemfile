@@ -7,6 +7,10 @@ gem 'sassc-rails', '>= 2.1.0'
 gem 'puma', "~> 5.0"
 gem 'jquery-rails'
 
+gem "image_processing", "1.12.1"
+gem "mini_magick", "4.9.5"
+gem "active_storage_validations", "0.8.2"
+
 gem 'faker'
 gem 'will_paginate', '~>3.1'
 gem 'bootstrap-will_paginate', '1.0.0'
@@ -27,6 +31,8 @@ gem "puma", "~> 5.0"
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
 gem "importmap-rails"
 
+
+gem 'carrierwave'
 # Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
 gem "turbo-rails"
 

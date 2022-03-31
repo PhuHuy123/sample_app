@@ -1,8 +1,10 @@
 class User < ApplicationRecord
+    has_many :microposts, class_name: Micropost.name, dependent: :destroy
 
     attr_accessor :remember_token, :activation_token, :reset_token
     before_save:downcase_email
     before_create :create_activation_digest
+    
     validates :name, presence: true, length: { maximum: 50 }
     VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
     validates :email, presence: true, length: { maximum: 255 },
@@ -49,7 +51,8 @@ class User < ApplicationRecord
         # Activates an account.
     def activate
         update_attribute(:activated,true)
-        update_attribute(:activated_at, Time.zone.now)
+            update_attribute(:activated_at, Time.zone.now)
+        #  update_columns(activated: FILL_IN, activated_at: FILL_IN)
     end
     # Sends activation email.
     def send_activation_email
@@ -60,6 +63,8 @@ class User < ApplicationRecord
         self.reset_token = User.new_token
         update_attribute(:reset_digest, User.digest(reset_token))
         update_attribute(:reset_sent_at, Time.zone.now)
+        # update_columns(reset_digest: FILL_IN,
+        #                 reset_sent_at: FILL_IN)
     end
     # Sends password reset email.
     def send_password_reset_email
@@ -70,6 +75,14 @@ class User < ApplicationRecord
     def password_reset_expired?
         reset_sent_at < 2.hours.ago
     end
+
+
+    # Defines a proto-feed.
+    # See "Following users" for the full implementation.
+    def feed
+        Micropost.where("user_id = ?", id)
+    end
+
     private
     # Converts email to all lower-case.
     def downcase_email
